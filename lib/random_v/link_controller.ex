@@ -1,6 +1,7 @@
 defmodule RandomV.LinkController do
   use Plug.Router
   require Logger
+  alias RandomV.LinkService
 
   plug(Plug.Logger)
   plug(:match)
@@ -19,7 +20,7 @@ defmodule RandomV.LinkController do
         :error -> playlist_id
       end
 
-    {time, link} = :timer.tc(&RandomV.LinkService.get_random_link/2, [playlist_id, api_key])
+    {time, link} = :timer.tc(&LinkService.get_random_link/2, [playlist_id, api_key])
     Logger.info("Got a link in #{time / 1000} ms: #{link}")
 
     case Map.has_key?(query, "redirect") do

@@ -1,5 +1,6 @@
 defmodule RandomV.LinkService do
   require Logger
+  alias RandomV.YoutubeApi
 
   @page_size 50
 
@@ -12,7 +13,7 @@ defmodule RandomV.LinkService do
   end
 
   def get_playlist_size(playlist_id, api_key) do
-    RandomV.YoutubeApi.get_playlist(playlist_id, api_key)
+    YoutubeApi.get_playlist(playlist_id, api_key)
     |> Map.get("items")
     |> List.first()
     |> Map.get("contentDetails")
@@ -55,11 +56,11 @@ defmodule RandomV.LinkService do
   end
 
   def first_page(playlist_id, api_key) do
-    RandomV.YoutubeApi.list_playlist_items(playlist_id, api_key, @page_size)
+    YoutubeApi.list_playlist_items(playlist_id, api_key, @page_size)
   end
 
   def next_page(page_token, playlist_id, api_key) do
-    RandomV.YoutubeApi.list_playlist_items(playlist_id, api_key, @page_size, page_token)
+    YoutubeApi.list_playlist_items(playlist_id, api_key, @page_size, page_token)
   end
 
   def get_item_index(n, page_size) do
