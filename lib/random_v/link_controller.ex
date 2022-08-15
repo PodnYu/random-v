@@ -11,12 +11,18 @@ defmodule RandomV.LinkController do
     [playlist_id: playlist_id, youtube_api_key: api_key] =
       Application.get_all_env(:youtube_random_v)
 
+    query = fetch_query_params(conn).query_params
+
+    playlist_id =
+      case Map.fetch(query, "playlist_id") do
+        {:ok, p_id} -> p_id
+        :error -> playlist_id
+      end
+
     {time, link} = :timer.tc(&RandomV.LinkService.get_random_link/2, [playlist_id, api_key])
-    Logger.info("got a link in #{time / 1000} ms: #{link}")
+    Logger.info("Got a link in #{time / 1000} ms: #{link}")
 
-    params = fetch_query_params(conn).query_params
-
-    case Map.has_key?(params, "redirect") do
+    case Map.has_key?(query, "redirect") do
       true -> redirect(conn, link)
       _ -> send_link_json(conn, link)
     end

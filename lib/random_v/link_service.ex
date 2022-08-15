@@ -1,4 +1,6 @@
 defmodule RandomV.LinkService do
+  require Logger
+
   @page_size 50
 
   def get_random_link(playlist_id, api_key) do
@@ -28,6 +30,8 @@ defmodule RandomV.LinkService do
 
   def get_nth_video_id(index, playlist_id, api_key) do
     page_index = get_page_index(index, @page_size)
+
+    Logger.debug("link index: #{index}, page index: #{page_index}")
 
     page = get_page(page_index, playlist_id, api_key)
 
