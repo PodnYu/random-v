@@ -23,7 +23,7 @@ defmodule RandomV.LinkService do
 
   def get_nth_link(index, playlist_id, api_key) do
     video_id = get_nth_video_id(index, playlist_id, api_key)
-    "youtube.com/watch?v=#{video_id}"
+    "https://youtube.com/watch?v=#{video_id}"
   end
 
   def get_nth_video_id(index, playlist_id, api_key) do

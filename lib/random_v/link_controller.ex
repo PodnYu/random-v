@@ -14,10 +14,22 @@ defmodule RandomV.LinkController do
     {time, link} = :timer.tc(&RandomV.LinkService.get_random_link/2, [playlist_id, api_key])
     Logger.info("got a link in #{time / 1000} ms: #{link}")
 
+    params = fetch_query_params(conn).query_params
+
+    case Map.has_key?(params, "redirect") do
+      true -> redirect(conn, link)
+      _ -> send_link_json(conn, link)
+    end
+  end
+
+  def send_link_json(conn, link) do
     send_resp(conn, 200, Poison.encode!(%{link: link}))
-    # conn
-    # |> put_resp_header("location", "https://" <> link)
-    # |> send_resp(302, "text/html")
+  end
+
+  def redirect(conn, link) do
+    conn
+    |> put_resp_header("location", link)
+    |> send_resp(302, "text/html")
   end
 
   get "/health" do
