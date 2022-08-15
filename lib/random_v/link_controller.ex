@@ -7,7 +7,7 @@ defmodule RandomV.LinkController do
   plug(Plug.Parsers, parsers: [:json], json_decoder: Poison)
   plug(:dispatch)
 
-  get "/music" do
+  get "/api/v1/link" do
     [playlist_id: playlist_id, youtube_api_key: api_key] =
       Application.get_all_env(:youtube_random_v)
 
