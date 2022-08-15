@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Random V
+  title: RandomV
   version: 0.1.0
   description: |
     A web service to get random video link from youtube playlist.
@@ -15,7 +15,7 @@ paths:
         - in: query
           name: playlist_id
           description: |
-            If not specified, default playlist will be used (For now it's my music playlist).
+            If not specified, default playlist will be used.
           schema:
             type: string
         - in: query
