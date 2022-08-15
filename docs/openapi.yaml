@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: Random V
+  version: 0.1.0
+  description: |
+    A web service to get random video link from youtube playlist.
+servers:
+  - url: http://localhost:8080/api/v1
+
+paths:
+  /link:
+    get:
+      summary: Get random link from a playlist
+      parameters:
+        - in: query
+          name: playlist_id
+          description: |
+            If not specified, default playlist will be used (For now it's my music playlist).
+          schema:
+            type: string
+        - in: query
+          name: redirect
+          description: |
+            Redirect flag. Indicates whether to return a json (flag not set) or redirect to the link (flag set).
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Link'
+        '302':
+          description: Redirect to the link
+          headers:
+            Location:
+              schema:
+                type: string
+              description: Link
+        '500':
+          description: Internal server error
+
+  /health:
+    get:
+      summary: Health endpoint
+      responses:
+        '200':
+          description: Success
+          content:
+            text/plain:
+              schema:
+                default: ok\n
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Link:
+      type: object
+      additionalProperties: false
+      properties:
+        link:
+          type: string
+          example: https://youtube.com/watch?v=<video_id>
