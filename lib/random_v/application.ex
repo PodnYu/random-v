@@ -2,11 +2,11 @@ defmodule RandomV.Application do
   @moduledoc false
 
   use Application
+  require Logger
 
   @impl true
   def start(_type, _args) do
-    # run tests with another port
-    port = if(Mix.env() == :test, do: 4002, else: 4001)
+    port = Application.get_env(:youtube_random_v, :port)
 
     children = [
       Plug.Cowboy.child_spec(
@@ -17,6 +17,10 @@ defmodule RandomV.Application do
     ]
 
     opts = [strategy: :one_for_one, name: RandomV.Supervisor]
-    Supervisor.start_link(children, opts)
+    result = Supervisor.start_link(children, opts)
+
+    Logger.info("Listening on :#{port}")
+
+    result
   end
 end

@@ -9,15 +9,14 @@ defmodule RandomV.LinkController do
   plug(:dispatch)
 
   get "/api/v1/link" do
-    [playlist_id: playlist_id, youtube_api_key: api_key] =
-      Application.get_all_env(:youtube_random_v)
+    api_key = Application.get_env(:youtube_random_v, :youtube_api_key)
 
     query = fetch_query_params(conn).query_params
 
     playlist_id =
       case Map.fetch(query, "playlist_id") do
         {:ok, p_id} -> p_id
-        :error -> playlist_id
+        :error -> Application.get_env(:youtube_random_v, :playlist_id)
       end
 
     {time, link} = :timer.tc(&LinkService.get_random_link/2, [playlist_id, api_key])
